@@ -10,7 +10,7 @@ public class packet_factory {
 		case OSPF_PAKET://OSPF
 			return OSPF_packet.analyzePacket(p);
 		default:
-			System.out.println("unmatched protocol packet");
+			//System.out.println("unmatched protocol packet");  // make comment when test incase too many log
 			return null;
 		}
 	}

@@ -12,6 +12,7 @@ public class OSPF_LSR_Packet extends OSPF_packet {
 	
 	public OSPF_LSR_Packet(IPPacket p) {
 		// TODO Auto-generated constructor stub	
+		super(p);
 	}
 	
 	class LSR_section{

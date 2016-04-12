@@ -13,6 +13,7 @@ public class OSPF_LSU_Packet extends OSPF_packet {
 	
 	public OSPF_LSU_Packet(IPPacket p) {
 		// TODO Auto-generated constructor stub	
+		super(p);
 	}
 	
 	

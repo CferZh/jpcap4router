@@ -16,6 +16,7 @@ public class OSPF_DD_Packet extends OSPF_packet {
 	public byte[] LSA_data;
 	public OSPF_DD_Packet(IPPacket p) {
 		// TODO Auto-generated constructor stub	
+		super(p);
 	}
 	
 	
