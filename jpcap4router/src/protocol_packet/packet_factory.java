@@ -4,7 +4,7 @@ import jpcap.packet.IPPacket;
 
 public class packet_factory {
 //	private final static int PROTOCOL_BYTE=9;//ip packet 10th byte declear the type of packet
-	private final static int OSPF_PAKET=0x59;
+	public final static int OSPF_PAKET=0x59;
 	public static IPPacket createPacket(IPPacket p){
 		switch(p.protocol){
 		case OSPF_PAKET://OSPF

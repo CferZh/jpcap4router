@@ -25,7 +25,7 @@ public class jpcap_util {
 				System.out.println(i+" : "+devices[i].description);				
 			}
 			
-			int deviceid=id>0?id:new Scanner(System.in).nextInt();
+			int deviceid=id>=0?id:new Scanner(System.in).nextInt();
 			try {
 				//打开网卡
 				/** openDevice(NetworkInterface intrface, int snaplen, boolean promics, int to_ms);

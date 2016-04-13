@@ -59,6 +59,10 @@ public class OSPF_packet extends IPPacket {
 			auth_data[i]=p.data[16+i];
 		}
 	}
+	public OSPF_packet() {
+		// TODO Auto-generated constructor stub
+		super();
+	}
 	public int getPacketLen(){
 		return (packet_length[0]&0xFF)<<8 + (packet_length[1]&0xff);
 	}

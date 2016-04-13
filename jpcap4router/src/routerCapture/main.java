@@ -13,7 +13,7 @@ public class main {
 		 * argv: -1 choose netcard
 		 * 		 >0 using assigned netcardID
 		 */
-		jpcap_util jpcap=jpcap_util.getInstance(3);
+		jpcap_util jpcap=jpcap_util.getInstance(0);
 		//start listen with the callback_receiver provided by argv2
 		jpcap.startCaptorWithReciever(new callback_reciever());
 		
