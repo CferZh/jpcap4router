@@ -109,4 +109,10 @@ public class OSPF_Hello_Packet extends OSPF_packet {
 		}
 		  
 	}
+	public void setActiveNeighbor(byte[] neighbors){
+		active_neighbor=new byte[neighbors.length];
+		for(int i=0;i<neighbors.length;i++){
+			active_neighbor[i]=neighbors[i];
+		}
+	}
 }
