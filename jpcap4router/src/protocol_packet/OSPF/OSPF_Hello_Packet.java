@@ -154,8 +154,27 @@ public class OSPF_Hello_Packet extends OSPF_packet {
 			active_neighbor[i]=neighbors[i];
 		}
 	}
+	/**
+	 * combine values in packet to a byte[] in order to append to ippacket.data when packet send
+	 * TODO simple password auth && md5 auth XXX
+	 * @return
+	 */
 	public byte[] getSendableData(){
+		if(checkBeforeSend()>0){
+			System.out.println("still values not set in hello packet");
+			return null;
+		}
 		byte[] data=(active_neighbor==null)?new byte[OSPF_HEADER_LEN+OSPF_HEADER_LEN]:new byte[OSPF_HEADER_LEN+OSPF_HEADER_LEN+active_neighbor.length];
+		byte[] ospfheader=getOSPFHeaderData();
+		for(int i=0;i<OSPF_HEADER_LEN;i++){// set content of ospf header , there is auth data && checksum tobe set
+			data[i]=ospfheader[i];
+		}
+		for(int i=0;i<4;i++){
+			data[OSPF_HEADER_LEN+i]=net_mask[i];
+		}
+		data[OSPF_HEADER_LEN+4]=hello_interval[0];
+		data[OSPF_HEADER_LEN+5]=hello_interval[1];
+		data[OSPF_HEADER_LEN+6]=options;
 		
 		return data;
 	}

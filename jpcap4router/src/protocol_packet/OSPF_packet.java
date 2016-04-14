@@ -69,6 +69,7 @@ public class OSPF_packet extends IPPacket {
 	}
 	/**
 	 * combine all value in packet to a byte[] to append in ippackt.data
+	 * TODO simple password auth && MD5 auth , now null auth only
 	 * @return
 	 */
 	public byte[] getOSPFHeaderData(){
