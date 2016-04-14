@@ -8,12 +8,13 @@ public class OSPF_packet extends IPPacket {
 	/**
 	 * final variables
 	 */
-	private static final int OSPF_TYPE_BYTE=1;//OSPF header 2nd byte declear the type of packet
-	private static final int OSPF_HELLO=0x01;
-	private static final int OSPF_DD=0x02;
-	private static final int OSPF_LSR=0x03;
-	private static final int OSPF_LSU=0x04;
-	private static final int OSPF_LSack=0x05;
+	protected static final int OSPF_TYPE_BYTE=1;//OSPF header 2nd byte declear the type of packet
+	protected static final int OSPF_HELLO=0x01;
+	protected static final int OSPF_DD=0x02;
+	protected static final int OSPF_LSR=0x03;
+	protected static final int OSPF_LSU=0x04;
+	protected static final int OSPF_LSack=0x05;
+	protected static final int OSPF_HEADER_LEN=24;//24 byte ospf header
 	/**
 	 * variables in ospf header
 	 */
@@ -65,5 +66,30 @@ public class OSPF_packet extends IPPacket {
 	}
 	public int getPacketLen(){
 		return (packet_length[0]&0xFF)<<8 + (packet_length[1]&0xff);
+	}
+	/**
+	 * combine all value in packet to a byte[] to append in ippackt.data
+	 * @return
+	 */
+	public byte[] getOSPFHeaderData(){
+		byte[] data=new byte[OSPF_HEADER_LEN];
+		data[0]=version;
+		data[1]=message_type;
+		data[2]=packet_length[0];
+		data[3]=packet_length[1];
+		for(int i=0 ; i< 4 ;i++){
+			data[4+i]=source_router[i];
+		}
+		for(int i =0 ;i<4 ;i++){
+			data[8+i]=area_id[i];
+		}
+		data[12]=0;//checksum 2 byte
+		data[13]=0;//checksum 
+		data[14]=auth_data[0];
+		data[15]=auth_data[1];
+		for(int i=0;i<8;i++){//only when null authentication
+			data[16+i]=0;
+		}
+		return data;
 	}
 }

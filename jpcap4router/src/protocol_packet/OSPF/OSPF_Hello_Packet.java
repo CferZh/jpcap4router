@@ -4,10 +4,11 @@ import jpcap.packet.IPPacket;
 import protocol_packet.OSPF_packet;
 
 public class OSPF_Hello_Packet extends OSPF_packet {
+	
+	protected static final int NORMAL_HELLO_LEN=20;//hello packet length except active neighbor
 	/**
 	 * variables in OSPF HELLO packet
-	 */
-	
+	 */	
 	public byte[] net_mask=new byte[4];
 	public byte[] hello_interval=new byte[2];
 	public byte options=0;
@@ -15,14 +16,18 @@ public class OSPF_Hello_Packet extends OSPF_packet {
 	public byte[] router_dead_interval=new byte[4];
 	public byte[] designed_router=new byte[4];
 	public byte[] bk_designed_router=new byte[4];
-	public byte[] lls_data=new byte[12];
-	public byte[] active_neighbor;
+	public byte[] lls_data=new byte[12];//cisco only not nessesary , set options L_flag to 1 when this present 
+	public byte[] active_neighbor=null;
 	
 	private byte send_check=0;//check all value in ospf protocol have been set before send
 	
 	public OSPF_Hello_Packet(){
 		super();
 	}
+	/**
+	 * analyze ip packet to ospf hello packet
+	 * @param p
+	 */
 	public OSPF_Hello_Packet(IPPacket p) {
 		// TODO Auto-generated constructor stub	
 		//TODO lls_data section & active neighbor section
@@ -45,11 +50,18 @@ public class OSPF_Hello_Packet extends OSPF_packet {
 		}
 		
 	}
-	
+	/**
+	 * TODO finish the check before send ensure all the value have been set
+	 * @return
+	 */
 	public int checkBeforeSend(){
 		return 0;
 	}
-	
+	/**
+	 *  set the value of netmask
+	 * @param mask
+	 * @throws Exception
+	 */
 	public void setNetMask(byte[] mask) throws Exception{
 		if(mask.length!=4){
 			throw new Exception("netmask length error!");
@@ -58,10 +70,29 @@ public class OSPF_Hello_Packet extends OSPF_packet {
 			net_mask[i]=mask[i];
 		}
 	}
+	/**
+	 * set value of hellointerval
+	 * @param interval
+	 */
 	public void setHelloInterval(int interval){
 		hello_interval[0]=(byte)((interval>>8)&0xff);
 		hello_interval[1]=(byte)(interval&0xff);
 	}
+	/**
+	 * set value of options
+	 * @param DN_flag
+	 * @param O_flag
+	 * @param DC_flag demand circuits   This bit describes the router's handling of demand circuits, as
+        specified in [Ref21]
+	 * @param L_flag   lls data block This bit describes the router's willingness to receive and
+        forward External-Attributes-LSAs, as specified in [Ref20]
+	 * @param NP_flag   This bit describes the handling of Type-7 LSAs, as specified in
+        [Ref19]
+	 * @param MC_flag  multicast This bit describes whether IP multicast datagrams are forwarded
+        according to the specifications in [Ref18]
+	 * @param E_flag   external routing   This bit describes the way AS-external-LSAs are flooded
+	 * @param MT_flag  multi topology
+	 */
 	public void setOptions(boolean DN_flag,boolean O_flag,boolean DC_flag,boolean L_flag,boolean NP_flag,boolean MC_flag,boolean E_flag,boolean MT_flag){
 		byte opt=0;
 		if(DN_flag)
@@ -82,9 +113,17 @@ public class OSPF_Hello_Packet extends OSPF_packet {
 			opt+=0x01;
 		options=opt;
 	}
+	/**
+	 * set value of options by a byte
+	 * @param _option
+	 */
 	public void setOptions(byte _option){
 		options=_option;
 	}
+	/**
+	 * set router priority
+	 * @param priority
+	 */
 	public void setRouterPriority(byte priority){
 		router_priority=priority;
 	}
@@ -114,5 +153,10 @@ public class OSPF_Hello_Packet extends OSPF_packet {
 		for(int i=0;i<neighbors.length;i++){
 			active_neighbor[i]=neighbors[i];
 		}
+	}
+	public byte[] getSendableData(){
+		byte[] data=(active_neighbor==null)?new byte[OSPF_HEADER_LEN+OSPF_HEADER_LEN]:new byte[OSPF_HEADER_LEN+OSPF_HEADER_LEN+active_neighbor.length];
+		
+		return data;
 	}
 }
