@@ -20,7 +20,7 @@ public class util {
 		for(int i=0;i<buff.length;i+=2){
 			result=result+((buff[i]&0xff)<<8)+(buff[i+1]&0xff);
 		}
-		for(;result>65535;result=result>>16+(result&0xffff));
+		for(;result>65535;result=((result>>16)+(result&0xffff)));
 		result=0xffff-result;
 		return result;
 	}
@@ -30,7 +30,7 @@ public class util {
 			result=result+((buff[i]&0xff)<<8)+(buff[i+1]&0xff);
 		}
 		result+=buff[buff.length-1]<<8;// last 8bit section   padding a 0x00 at last 
-		for(;result>65535;result=result>>16+(result&0xffff));
+		for(;result>65535;result=((result>>16)+(result&0xffff)));
 		result=0xffff-result;
 		return result;
 	}

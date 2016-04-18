@@ -164,7 +164,7 @@ public class OSPF_Hello_Packet extends OSPF_packet {
 			System.out.println("still values not set in hello packet");
 			return null;
 		}
-		byte[] data=(active_neighbor==null)?new byte[OSPF_HEADER_LEN+OSPF_HEADER_LEN]:new byte[OSPF_HEADER_LEN+OSPF_HEADER_LEN+active_neighbor.length];
+		byte[] data=(active_neighbor==null)?new byte[OSPF_HEADER_LEN+NORMAL_HELLO_LEN]:new byte[OSPF_HEADER_LEN+NORMAL_HELLO_LEN+active_neighbor.length];
 		byte[] ospfheader=getOSPFHeaderData();
 		for(int i=0;i<OSPF_HEADER_LEN;i++){// set content of ospf header , there is auth data && checksum tobe set
 			data[i]=ospfheader[i];
@@ -175,7 +175,24 @@ public class OSPF_Hello_Packet extends OSPF_packet {
 		data[OSPF_HEADER_LEN+4]=hello_interval[0];
 		data[OSPF_HEADER_LEN+5]=hello_interval[1];
 		data[OSPF_HEADER_LEN+6]=options;
-		
+		data[OSPF_HEADER_LEN+7]=priority;
+		for(int i=0;i<4;i++){
+			data[OSPF_HEADER_LEN+8+i]=router_dead_interval[i];
+		}
+		for(int i=0;i<4;i++){
+			data[OSPF_HEADER_LEN+12+i]=designed_router[i];
+		}
+		for(int i=0;i<4;i++){
+			data[OSPF_HEADER_LEN+16+i]=bk_designed_router[i];
+		}
+		if(active_neighbor!=null){
+			for(int i=0;i<active_neighbor.length;i++){
+				data[OSPF_HEADER_LEN+20+i]=active_neighbor[i];
+			}
+		}
+		byte[] pchecksum=util.util.getchecksum(data);
+		data[12]=pchecksum[0];
+		data[13]=pchecksum[1];
 		return data;
 	}
 }
