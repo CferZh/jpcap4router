@@ -93,4 +93,41 @@ public class OSPF_packet extends IPPacket {
 		}
 		return data;
 	}
+	public void setVersion(int _version){
+		version=(byte)(_version&0xff);
+	}
+	public void setMessageType(int _type){
+		message_type=(byte)(_type&0xff);
+	}
+	public void setPackLen(int len){
+		packet_length[0]=(byte)(len>>8&0xff);
+		packet_length[1]=(byte)(len&0xff);
+	}
+	public void setSourceRouter(byte[] sr){
+		for(int i=0;i<4;i++){
+			source_router[i]=sr[i];
+		}
+	}
+	public void setAreaID(byte[] aid){
+		for(int i=0;i<4;i++){
+			area_id[i]=aid[i];
+		}
+	}
+	public void initChecksum(){
+		checksum[0]=0;
+		checksum[1]=0;
+	}
+	public void setChecksum(byte[] check){
+		check[0]=check[0];
+		check[1]=check[1];
+	}
+	public void setAuthType(int type){
+		auth_type[0]=(byte)(type>>8&0xff);
+		auth_type[1]=(byte)(type&0xff);
+	}
+	public void setAuthData(byte[] data){
+		for(int i=0;i<4;i++){
+			auth_data[i]=data[i];
+		}
+	}
 }
