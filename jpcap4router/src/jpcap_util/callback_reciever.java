@@ -3,6 +3,7 @@ package jpcap_util;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+import jpcap.JpcapSender;
 import jpcap.PacketReceiver;
 import jpcap.packet.IPPacket;
 import jpcap.packet.Packet;
@@ -46,16 +47,15 @@ public class callback_reciever implements PacketReceiver {
 							,pack.dont_frag,pack.more_frag,pack.offset,pack.ident,100,packet_factory.OSPF_PAKET,
 							InetAddress.getLocalHost(), InetAddress.getByAddress(dst));
 					byte[] sr={0x01,0x01,0x01,0x01};
-					byte[] aid={0x01,0x01,0x01,0x01};
+					byte[] aid={0x00,0x00,0x00,0x00};
 					byte[] authData={0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
 					hello.setAllOSPFHeader(2, 1, 0, sr, aid, 0, authData);
-					byte[] mask={(byte) 0xff,(byte)0xff,(byte)0xff,0x00};
-					hello.setNetMask(mask);
+					hello.setNetMask(((OSPF_Hello_Packet) pack).net_mask);
 					hello.setHelloInterval(10);
 					hello.setOptions((byte)0x04);
 					hello.setRouterPriority((byte)0x01);
 					hello.setRouterDeadInterval(40);
-					byte[] designID={0x00,0x00,0x00,0x00};
+					byte[] designID=sr;
 					byte[] bkID={0x00,0x00,0x00,0x00};
 					hello.setDesignedRouter(designID);
 					hello.setBKDesignedRouter(bkID);
@@ -68,6 +68,8 @@ public class callback_reciever implements PacketReceiver {
 					for(int i=0;i<len;i++){						
 						System.out.printf("%x ",hello.getSendableData()[i]);
 					}
+					jpcap_util utilInstance=jpcap_util.getInstance(3);
+					utilInstance.sendPacket(hello);
 				} catch (UnknownHostException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

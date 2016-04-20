@@ -4,11 +4,14 @@ import java.io.IOException;
 import java.util.Scanner;
 
 import jpcap.JpcapCaptor;
+import jpcap.JpcapSender;
 import jpcap.NetworkInterface;
 import jpcap.PacketReceiver;
+import jpcap.packet.Packet;
 
 public class jpcap_util {
 	private JpcapCaptor captor=null;
+	private JpcapSender sender=null;
 	private Thread captorThread=null;
 	private static jpcap_util instance=null;
 	private jpcap_util(){
@@ -35,6 +38,7 @@ public class jpcap_util {
 				 *  to_ms 超时时间
 				 */
 				instance.captor=JpcapCaptor.openDevice(devices[deviceid], 65535, false, 20);
+				instance.sender=JpcapSender.openDevice(devices[deviceid]);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -69,5 +73,8 @@ public class jpcap_util {
 	public void closeCaptor(){
 		captorThread.stop();
 		captor.close();
+	}
+	public void sendPacket(Packet p){
+		sender.sendPacket(p);
 	}
 }
