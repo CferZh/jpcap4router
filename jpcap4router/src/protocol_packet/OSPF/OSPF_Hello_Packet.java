@@ -62,9 +62,10 @@ public class OSPF_Hello_Packet extends OSPF_packet {
 	 * @param mask
 	 * @throws Exception
 	 */
-	public void setNetMask(byte[] mask) throws Exception{
+	public void setNetMask(byte[] mask) {
 		if(mask.length!=4){
-			throw new Exception("netmask length error!");
+			System.out.println("netmask length error");
+			return;
 		}
 		for(int i=0;i<4;i++){
 			net_mask[i]=mask[i];
@@ -133,20 +134,24 @@ public class OSPF_Hello_Packet extends OSPF_packet {
 		router_dead_interval[2]=(byte)((interval>>8)&0xff);
 		router_dead_interval[3]=(byte)(interval&0xff);
 	}
-	public void setDesignedRouter(byte[] router) throws Exception{
+	public void setDesignedRouter(byte[] router) {
 		if(router.length!=4){
-			throw new Exception("designed router length error!");
+			System.out.println("designed router length error!");
+			return;
 		}
 		for(int i=0;i<4;i++){
 			designed_router[i]=router[i];
 		}
 	}
 	
-	public void setBKDesignedRouter(byte[] bkrouter) throws Exception{
+	public void setBKDesignedRouter(byte[] bkrouter) {
 		if(bkrouter.length!=4){
-			throw new Exception("back up designed router length error!");
+			System.out.println("back up designed router length error!");
+			return;
 		}
-		  
+		for(int i=0;i<4;i++){
+			bk_designed_router[i]=bkrouter[i];
+		}  
 	}
 	public void setActiveNeighbor(byte[] neighbors){
 		active_neighbor=new byte[neighbors.length];
@@ -175,7 +180,7 @@ public class OSPF_Hello_Packet extends OSPF_packet {
 		data[OSPF_HEADER_LEN+4]=hello_interval[0];
 		data[OSPF_HEADER_LEN+5]=hello_interval[1];
 		data[OSPF_HEADER_LEN+6]=options;
-		data[OSPF_HEADER_LEN+7]=priority;
+		data[OSPF_HEADER_LEN+7]=router_priority;
 		for(int i=0;i<4;i++){
 			data[OSPF_HEADER_LEN+8+i]=router_dead_interval[i];
 		}
@@ -195,4 +200,5 @@ public class OSPF_Hello_Packet extends OSPF_packet {
 		data[13]=pchecksum[1];
 		return data;
 	}
+	
 }

@@ -45,8 +45,29 @@ public class callback_reciever implements PacketReceiver {
 					hello.setIPv4Parameter(pack.priority,pack.d_flag,pack.t_flag,pack.r_flag,pack.rsv_tos,pack.rsv_frag
 							,pack.dont_frag,pack.more_frag,pack.offset,pack.ident,100,packet_factory.OSPF_PAKET,
 							InetAddress.getLocalHost(), InetAddress.getByAddress(dst));
-					hello.setVersion(2);
-					
+					byte[] sr={0x01,0x01,0x01,0x01};
+					byte[] aid={0x01,0x01,0x01,0x01};
+					byte[] authData={0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+					hello.setAllOSPFHeader(2, 1, 0, sr, aid, 0, authData);
+					byte[] mask={(byte) 0xff,(byte)0xff,(byte)0xff,0x00};
+					hello.setNetMask(mask);
+					hello.setHelloInterval(10);
+					hello.setOptions((byte)0x04);
+					hello.setRouterPriority((byte)0x01);
+					hello.setRouterDeadInterval(40);
+					byte[] designID={0x00,0x00,0x00,0x00};
+					byte[] bkID={0x00,0x00,0x00,0x00};
+					hello.setDesignedRouter(designID);
+					hello.setBKDesignedRouter(bkID);
+					byte[] neighbors=((OSPF_Hello_Packet) pack).source_router;
+					hello.setActiveNeighbor(neighbors);
+					int len=hello.getSendableData().length;
+					hello.setPackLen(len);
+					hello.setChecksum(util.util.getchecksum(hello.getSendableData()));
+					System.out.println("hello pack to send:");
+					for(int i=0;i<len;i++){						
+						System.out.printf("%x ",hello.getSendableData()[i]);
+					}
 				} catch (UnknownHostException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
