@@ -130,4 +130,14 @@ public class OSPF_packet extends IPPacket {
 			auth_data[i]=data[i];
 		}
 	}
+	public void setAll(int vers,int msgType,int packLen,byte[] srcRouter,byte[] areaID,int authType,byte[] authData){
+		setVersion(vers);
+		setMessageType(msgType);
+		setPackLen(packLen);
+		setSourceRouter(srcRouter);
+		setAreaID(areaID);
+		initChecksum();
+		setAuthType(authType);
+		setAuthData(authData);
+	}
 }
