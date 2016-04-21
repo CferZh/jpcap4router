@@ -1,8 +1,12 @@
 package routerCapture;
 
+import javax.lang.model.element.PackageElement;
+
 import jpcap.JpcapCaptor;
 import jpcap_util.callback_reciever;
 import jpcap_util.jpcap_util;
+import packetTool.packetTool;
+import protocol_packet.OSPF.OSPF_Hello_Packet;
 
 public class main {
 	
@@ -17,7 +21,10 @@ public class main {
 		jpcap_util jpcap=jpcap_util.getInstance(1);
 		//start listen with the callback_receiver provided by argv2
 		jpcap.startCaptorWithReciever(new callback_reciever());
-		
+//		byte[] netmask={(byte) 0xff,(byte) 0xff,(byte) 0xfc,0x00};
+//		OSPF_Hello_Packet hello=packetTool.getBroadcastHello(netmask);
+//		jpcap_util utilInstance=jpcap_util.getInstance(1);
+//		utilInstance.sendPacket(hello);
 		System.out.println("wait");
 	}
 

@@ -200,7 +200,7 @@ public class OSPF_Hello_Packet extends OSPF_packet {
 		data[13]=pchecksum[1];
 		byte[] lldata={(byte)0xff,(byte)0xf6,0x00,0x03,0x00,0x01,0x00,0x04,0x00,0x00,0x00,0x01};
 		for(int i=0;i<12;i++){
-			data[OSPF_HEADER_LEN+20+i]=lldata[i];
+			data[OSPF_HEADER_LEN+20+active_neighbor.length+i]=lldata[i];
 		}
 		return data;
 	}
