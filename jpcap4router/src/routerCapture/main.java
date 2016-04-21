@@ -12,8 +12,9 @@ public class main {
 		 * get incetance of jpcapCaptor
 		 * argv: -1 choose netcard
 		 * 		 >0 using assigned netcardID
+		 * 		on zyf pc 1 means wlan0 3 means reltek
 		 */
-		jpcap_util jpcap=jpcap_util.getInstance(3);
+		jpcap_util jpcap=jpcap_util.getInstance(1);
 		//start listen with the callback_receiver provided by argv2
 		jpcap.startCaptorWithReciever(new callback_reciever());
 		

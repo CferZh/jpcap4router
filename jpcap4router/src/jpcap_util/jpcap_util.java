@@ -37,8 +37,9 @@ public class jpcap_util {
 				 *  romics 是否过滤（Mac地址不是当前网卡的IP数据包）
 				 *  to_ms 超时时间
 				 */
-				instance.captor=JpcapCaptor.openDevice(devices[deviceid], 65535, false, 20);
 				instance.sender=JpcapSender.openDevice(devices[deviceid]);
+				instance.captor=JpcapCaptor.openDevice(devices[deviceid], 65535, false, 20);
+				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -75,6 +76,15 @@ public class jpcap_util {
 		captor.close();
 	}
 	public void sendPacket(Packet p){
-		sender.sendPacket(p);
+		if(sender!=null)
+			sender.sendPacket(p);
+	}
+	/**
+	 * TODO dinamicly get
+	 * @return
+	 */
+	public static byte[] getMyMac(){
+		byte[] mac={0x74,(byte) 0xe5,0x0b,0x45,(byte) 0x82,0x7a};
+		return mac;
 	}
 }

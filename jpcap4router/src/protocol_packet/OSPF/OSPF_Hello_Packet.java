@@ -16,7 +16,7 @@ public class OSPF_Hello_Packet extends OSPF_packet {
 	public byte[] router_dead_interval=new byte[4];
 	public byte[] designed_router=new byte[4];
 	public byte[] bk_designed_router=new byte[4];
-	public byte[] lls_data=new byte[12];//cisco only not nessesary , set options L_flag to 1 when this present 
+	public byte[] lls_data=new byte[12];//cisco only , set options L_flag to 1 when this present, 
 	public byte[] active_neighbor=null;
 	
 	private byte send_check=0;//check all value in ospf protocol have been set before send
@@ -169,7 +169,7 @@ public class OSPF_Hello_Packet extends OSPF_packet {
 			System.out.println("still values not set in hello packet");
 			return null;
 		}
-		byte[] data=(active_neighbor==null)?new byte[OSPF_HEADER_LEN+NORMAL_HELLO_LEN]:new byte[OSPF_HEADER_LEN+NORMAL_HELLO_LEN+active_neighbor.length];
+		byte[] data=(active_neighbor==null)?new byte[OSPF_HEADER_LEN+NORMAL_HELLO_LEN+12]:new byte[OSPF_HEADER_LEN+NORMAL_HELLO_LEN+active_neighbor.length+12];
 		byte[] ospfheader=getOSPFHeaderData();
 		for(int i=0;i<OSPF_HEADER_LEN;i++){// set content of ospf header , there is auth data && checksum tobe set
 			data[i]=ospfheader[i];
@@ -198,6 +198,10 @@ public class OSPF_Hello_Packet extends OSPF_packet {
 		byte[] pchecksum=util.util.getchecksum(data);
 		data[12]=pchecksum[0];
 		data[13]=pchecksum[1];
+		byte[] lldata={(byte)0xff,(byte)0xf6,0x00,0x03,0x00,0x01,0x00,0x04,0x00,0x00,0x00,0x01};
+		for(int i=0;i<12;i++){
+			data[OSPF_HEADER_LEN+20+i]=lldata[i];
+		}
 		return data;
 	}
 	
