@@ -33,20 +33,20 @@ public class OSPF_Hello_Packet extends OSPF_packet {
 		//TODO lls_data section & active neighbor section
 		super(p);
 		for(int i=0;i<4 ;i++){//4 byte net mask
-			net_mask[i]=p.data[24+i];
+			net_mask[i]=p.data[OSPF_HEADER_LEN+i];
 		}
-		hello_interval[0]=p.data[28];
-		hello_interval[1]=p.data[29];
-		options=p.data[30];
-		router_priority=p.data[31];
+		hello_interval[0]=p.data[OSPF_HEADER_LEN+4];
+		hello_interval[1]=p.data[OSPF_HEADER_LEN+5];
+		options=p.data[OSPF_HEADER_LEN+6];
+		router_priority=p.data[OSPF_HEADER_LEN+7];
 		for(int i=0;i<4;i++){//4byte router dead interval
-			router_dead_interval[i]=p.data[32+i];			
+			router_dead_interval[i]=p.data[OSPF_HEADER_LEN+8+i];			
 		}
 		for(int i=0;i<4;i++){
-			designed_router[i]=p.data[36+i];
+			designed_router[i]=p.data[OSPF_HEADER_LEN+12+i];
 		}
 		for (int i = 0; i < 4; i++) {
-			bk_designed_router[i]=p.data[40+i];
+			bk_designed_router[i]=p.data[OSPF_HEADER_LEN+16+i];
 		}
 		
 	}

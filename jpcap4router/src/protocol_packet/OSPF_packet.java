@@ -1,6 +1,7 @@
 package protocol_packet;
 
 import jpcap.packet.IPPacket;
+import protocol_packet.OSPF.OSPF_DD_Packet;
 import protocol_packet.OSPF.OSPF_Hello_Packet;
 
 public class OSPF_packet extends IPPacket {
@@ -35,7 +36,8 @@ public class OSPF_packet extends IPPacket {
 		switch(p.data[OSPF_TYPE_BYTE]){
 		case OSPF_HELLO:
 			return new OSPF_Hello_Packet(p); 
-		
+		case OSPF_DD:
+			return new OSPF_DD_Packet(p);
 		
 		
 		default:return null;
