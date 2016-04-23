@@ -8,6 +8,7 @@ import jpcap.packet.IPPacket;
 import jpcap.packet.Packet;
 import jpcap_util.jpcap_util;
 import protocol_packet.packet_factory;
+import protocol_packet.OSPF.OSPF_DD_Packet;
 import protocol_packet.OSPF.OSPF_Hello_Packet;
 
 public class packetTool {
@@ -75,6 +76,9 @@ public class packetTool {
 		}
 		
 		return hello;
+	}
+	public static OSPF_DD_Packet getAnwserDD(IPPacket pack){
+		return null;
 	}
 	public static boolean isSendByMe(Packet p){
 		try {
