@@ -4,3 +4,10 @@ TODO list:
 	3.下划线和驼峰命名法夹杂
 	4.涉及lla长度的地方全部用的固定长度12
 	5.hello包的checksum设置很乱
+	
+	
+	
+	
+LOG list:
+	1.gns3要与网卡ping的通需要网卡设置里面的ipv4硬件校验和设置为关闭，然后重启
+	2.防火墙要将ipv4ICMP回显规则打开，否则主机会对DD报文回复protocol unreachable
