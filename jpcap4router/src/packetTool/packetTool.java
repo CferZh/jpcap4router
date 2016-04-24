@@ -67,9 +67,6 @@ public class packetTool {
 			ether.dst_mac=dstMAC;
 			//ether.dst_mac=dst;
 			hello.datalink=ether;
-			jpcap_util utilInstance=jpcap_util.getInstance(1);
-			
-			utilInstance.sendPacket(hello);
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -78,7 +75,47 @@ public class packetTool {
 		return hello;
 	}
 	public static OSPF_DD_Packet getAnwserDD(IPPacket pack){
-		return null;
+		OSPF_DD_Packet ddpack=new OSPF_DD_Packet();
+//		byte dstIP[]={(byte) 0xE0,(byte)0x00,(byte)0x00,(byte)0x05};//broadcast dst 224.0.0.5
+		byte dstMAC[]={(byte)0xc4,0x00,0x16,0x08,0x00,0x10};//ipv4mcast
+		/**
+		 * use the information in captured packet to reconstruct new hello packet to send
+		 */
+		try {
+			/**
+			 * ip header
+			 */
+			ddpack.setIPv4Parameter(pack.priority,pack.d_flag,pack.t_flag,pack.r_flag,pack.rsv_tos,pack.rsv_frag
+					,pack.dont_frag,pack.more_frag,pack.offset,pack.ident,1,packet_factory.OSPF_PAKET,
+					InetAddress.getLocalHost(),InetAddress.getByName("10.203.8.144"));
+			/**
+			 * ospf header
+			 */
+			byte[] sr={0x01,0x01,0x01,0x01};
+			byte[] aid={0x00,0x00,0x00,0x00};
+			byte[] authData={0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+			ddpack.setAllOSPFHeader(2, 2, 0, sr, aid, 0, authData);
+			/**
+			 * ospf DD content
+			 */
+			ddpack.setInterfaceMTU(1500);
+			ddpack.setOptions((byte)0x52);
+			ddpack.setDDDescription(7);
+			ddpack.setSequence(2900);
+			ddpack.data=ddpack.getSendableData();
+			/**
+			 * set datalink header
+			 */
+			EthernetPacket ether=new EthernetPacket();
+			ether.frametype=EthernetPacket.ETHERTYPE_IP;
+			ether.src_mac=jpcap_util.getMyMac();
+			ether.dst_mac=dstMAC;
+			//ether.dst_mac=dst;
+			ddpack.datalink=ether;
+		}catch(Exception e ){
+			e.printStackTrace();
+		}
+		return ddpack;
 	}
 	public static boolean isSendByMe(Packet p){
 		try {

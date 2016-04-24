@@ -1,0 +1,6 @@
+TODO list:
+	1.HELLO getSendableData 中长度没有动态生成而是指定的   而且lla部分为写死的
+	2.ospf header 中的包长度字段填的不科学，全是用的经验值，而且hello和dd填长度的方式不一样
+	3.下划线和驼峰命名法夹杂
+	4.涉及lla长度的地方全部用的固定长度12
+	5.hello包的checksum设置很乱

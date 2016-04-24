@@ -199,8 +199,9 @@ public class OSPF_Hello_Packet extends OSPF_packet {
 		data[12]=pchecksum[0];
 		data[13]=pchecksum[1];
 		byte[] lldata={(byte)0xff,(byte)0xf6,0x00,0x03,0x00,0x01,0x00,0x04,0x00,0x00,0x00,0x01};
+		int offset=OSPF_HEADER_LEN+NORMAL_HELLO_LEN+(active_neighbor==null?0:active_neighbor.length);
 		for(int i=0;i<12;i++){
-			data[OSPF_HEADER_LEN+20+active_neighbor.length+i]=lldata[i];
+			data[offset+i]=lldata[i];
 		}
 		return data;
 	}
