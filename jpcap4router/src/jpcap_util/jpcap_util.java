@@ -86,6 +86,10 @@ public class jpcap_util {
 	public static byte[] getMyMac(){
 	//	byte[] mac={0x74,(byte) 0xe5,0x0b,0x45,(byte) 0x82,0x7a};//无线网卡
 		byte[] mac={(byte) 0xf0,(byte) 0xde,(byte) 0xf1,(byte) 0x8d,0x3f,(byte) 0xda};//有线网卡
-		return mac;
+		byte[] rMac=new byte[6];
+		for(int i=0;i<6;i++){
+			rMac[i]=mac[i];
+		}
+		return rMac;
 	}
 }

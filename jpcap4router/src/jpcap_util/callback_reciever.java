@@ -27,18 +27,18 @@ public class callback_reciever implements PacketReceiver {
 			if(pack instanceof OSPF_Hello_Packet){//ospf hello -> need to return a suitable hello to build neighor
 				
 				OSPF_Hello_Packet hello=packetTool.getAnswerHello(pack);
-				jpcap_util utilInstance=jpcap_util.getInstance(1);
+				jpcap_util utilInstance=jpcap_util.getInstance(3);
 				utilInstance.sendPacket(hello);
 				//主动发起ex start
 //				OSPF_DD_Packet ddpack=packetTool.getInitDD(pack);
 //				utilInstance.sendPacket(ddpack);
 				return;
 			}
-			if(pack instanceof OSPF_DD_Packet){//may be exstart need to return a suitable DD to establish master/slave relation
+//			if(pack instanceof OSPF_DD_Packet){//may be exstart need to return a suitable DD to establish master/slave relation
 //				OSPF_DD_Packet ddpack=packetTool.getAnwserDD(pack);
 //				jpcap_util utilInstance=jpcap_util.getInstance(1);
 //				utilInstance.sendPacket(ddpack);
-			}
+//			}
 			
 		}
 	}
