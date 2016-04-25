@@ -34,11 +34,11 @@ public class callback_reciever implements PacketReceiver {
 //				utilInstance.sendPacket(ddpack);
 				return;
 			}
-//			if(pack instanceof OSPF_DD_Packet){//may be exstart need to return a suitable DD to establish master/slave relation
-//				OSPF_DD_Packet ddpack=packetTool.getAnwserDD(pack);
-//				jpcap_util utilInstance=jpcap_util.getInstance(1);
-//				utilInstance.sendPacket(ddpack);
-//			}
+			if(pack instanceof OSPF_DD_Packet){//may be exstart need to return a suitable DD to establish master/slave relation
+				OSPF_DD_Packet ddpack=packetTool.getAnwserDD(pack);
+				jpcap_util utilInstance=jpcap_util.getInstance(1);
+				utilInstance.sendPacket(ddpack);
+			}
 			
 		}
 	}
