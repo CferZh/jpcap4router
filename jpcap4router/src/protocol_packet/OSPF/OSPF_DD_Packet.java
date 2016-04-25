@@ -143,7 +143,10 @@ public class OSPF_DD_Packet extends OSPF_packet {
 		return data;
 	}
 	public void setLSAData(byte[] lsas,int len){
-		
+		LSA_data=new byte[len];
+		for(int i=0;i<len;i++){
+			LSA_data[i]=lsas[i];
+		}
 	}
 	
 }
