@@ -35,9 +35,18 @@ public class callback_reciever implements PacketReceiver {
 				return;
 			}
 			if(pack instanceof OSPF_DD_Packet){//may be exstart need to return a suitable DD to establish master/slave relation
-				OSPF_DD_Packet ddpack=packetTool.getInitDD(pack);
-				jpcap_util utilInstance=jpcap_util.getInstance(1);
-				utilInstance.sendPacket(ddpack);
+				OSPF_DD_Packet ddpack=null;
+				if(((OSPF_DD_Packet)pack).DB_description>3){//init位为1,抢master
+					ddpack=packetTool.getInitDD(pack);
+				}
+				else if(((OSPF_DD_Packet)pack).DB_description!=0){//init位不是1,继续完成exstart
+					ddpack=packetTool.getAnwserDD(pack);
+				}
+				if(ddpack!=null){
+					jpcap_util utilInstance=jpcap_util.getInstance(1);
+					utilInstance.sendPacket(ddpack);
+				}
+				
 			}
 			
 		}

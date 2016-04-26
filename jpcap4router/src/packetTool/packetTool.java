@@ -7,6 +7,7 @@ import jpcap.packet.EthernetPacket;
 import jpcap.packet.IPPacket;
 import jpcap.packet.Packet;
 import jpcap_util.jpcap_util;
+import protocol_packet.OSPF_packet;
 import protocol_packet.packet_factory;
 import protocol_packet.OSPF.OSPF_DD_Packet;
 import protocol_packet.OSPF.OSPF_Hello_Packet;
@@ -34,7 +35,13 @@ public class packetTool {
 			/**
 			 * ospf header
 			 */
-			byte[] sr={0x20,0x01,0x01,0x01};
+			//使用比对方大的routerid
+			byte[] sr=new byte[4];
+			for(int i=0;i<4;i++){
+				sr[i]=((OSPF_packet)pack).source_router[i];
+			}
+			sr[3]+=1;
+		
 			byte[] aid={0x00,0x00,0x00,0x00};
 			byte[] authData={0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
 			hello.setAllOSPFHeader(2, 1, 0, sr, aid, 0, authData);
@@ -74,10 +81,19 @@ public class packetTool {
 		
 		return hello;
 	}
+	/**
+	 * 用于自身routerid 大于对方抢夺master时
+	 * @param pack
+	 * @return
+	 */
 	public static OSPF_DD_Packet getInitDD(IPPacket pack){
 		OSPF_DD_Packet ddpack=new OSPF_DD_Packet();
 //		byte dstIP[]={(byte) 0xE0,(byte)0x00,(byte)0x00,(byte)0x05};//broadcast dst 224.0.0.5
-		byte dstMAC[]={(byte)0xc4,0x04,0x08,0x48,0x00,0x10};//ipv4mcast
+//		byte dstMAC[]={(byte)0xc4,0x04,0x08,0x48,0x00,0x10};//ipv4mcast
+		byte dstMac[]=new byte[6];
+		for(int i=0;i<6;i++){
+			dstMac[i]=pack.header[6+i];
+		}
 		/**
 		 * use the information in captured packet to reconstruct new hello packet to send
 		 */
@@ -91,7 +107,13 @@ public class packetTool {
 			/**
 			 * ospf header
 			 */
-			byte[] sr={0x20,0x01,0x01,0x01};
+			
+			
+			byte[] sr=new byte[4];
+			for(int i=0;i<4;i++){
+				sr[i]=((OSPF_packet)pack).source_router[i];
+			}
+			sr[3]+=1;
 			byte[] aid={0x00,0x00,0x00,0x00};
 			byte[] authData={0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
 			ddpack.setAllOSPFHeader(2, 2, 0, sr, aid, 0, authData);
@@ -112,7 +134,7 @@ public class packetTool {
 			EthernetPacket ether=new EthernetPacket();
 			ether.frametype=EthernetPacket.ETHERTYPE_IP;
 			ether.src_mac=jpcap_util.getMyMac();
-			ether.dst_mac=dstMAC;
+			ether.dst_mac=dstMac;
 			//ether.dst_mac=dst;
 			ddpack.datalink=ether;
 		}catch(Exception e ){
@@ -120,6 +142,11 @@ public class packetTool {
 		}
 		return ddpack;
 	}
+	/**
+	 * 用于自身routerid 小于对面承认对面master时
+	 * @param pack
+	 * @return
+	 */
 	public static OSPF_DD_Packet getAnwserDD(IPPacket pack){
 		OSPF_DD_Packet ddpack=new OSPF_DD_Packet();
 //		byte dstIP[]={(byte) 0xE0,(byte)0x00,(byte)0x00,(byte)0x05};//broadcast dst 224.0.0.5
@@ -137,7 +164,11 @@ public class packetTool {
 			/**
 			 * ospf header
 			 */
-			byte[] sr={0x20,0x01,0x01,0x01};
+			byte[] sr=new byte[4];
+			for(int i=0;i<4;i++){
+				sr[i]=((OSPF_packet)pack).source_router[i];
+			}
+			sr[3]+=1;
 			byte[] aid={0x00,0x00,0x00,0x00};
 			byte[] authData={0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
 			ddpack.setAllOSPFHeader(2, 2, 0, sr, aid, 0, authData);
@@ -146,8 +177,8 @@ public class packetTool {
 			 */
 			ddpack.setInterfaceMTU(1500);
 			ddpack.setOptions((byte)0x52);
-			ddpack.setDDDescription(2);
-			ddpack.setSequence(((OSPF_DD_Packet)pack).DD_sequence);
+			ddpack.setDDDescription(3);
+			ddpack.setSequence(2223);
 			byte[] lsaData = {0x00,0x20,0x22,0x01,0x01,0x01,0x03,0x01,0x01,0x01,0x03,0x01,(byte) 0x80,0x00,0x00,0x02,0x43,(byte) 0xb5,0x00,0x30};
 			ddpack.setLSAData(lsaData, lsaData.length);
 			ddpack.data=ddpack.getSendableData();

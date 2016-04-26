@@ -40,4 +40,18 @@ public class util {
 		}
 		System.out.println();
 	}
+	public static int parseByte2Int(byte[] binary){
+		int result=0;
+		for(int i=0;i<4;i++){
+			result+=((binary[i]&0xff)<<(24-8*i));
+		}
+		return result;
+	}
+	public static byte[] parseInt2Byte(int num){
+		byte[] result=new byte[4];
+		for(int i=0;i<4;i++){
+			result[i]=(byte) ((num>>(24-8*i))&0xff);
+		}
+		return result;
+	}
 }
