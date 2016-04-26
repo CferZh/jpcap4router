@@ -34,4 +34,10 @@ public class util {
 		result=0xffff-result;
 		return result;
 	}
+	public static void printHexData(byte[] data){
+		for(int i=0;i<data.length;i++){
+			System.out.printf("%x ",data[i]);
+		}
+		System.out.println();
+	}
 }

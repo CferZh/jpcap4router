@@ -85,6 +85,10 @@ public class packetTool {
 			/**
 			 * ip header
 			 */
+//			System.out.println("header:");
+//			util.util.printHexData(pack.header);
+//			System.out.println("\ncontent:");
+//			util.util.printHexData(pack.data);
 			ddpack.setIPv4Parameter(pack.priority,pack.d_flag,pack.t_flag,pack.r_flag,pack.rsv_tos,pack.rsv_frag
 					,pack.dont_frag,pack.more_frag,pack.offset,pack.ident,1,packet_factory.OSPF_PAKET,
 					InetAddress.getLocalHost(),InetAddress.getByName("10.203.8.144"));
@@ -125,6 +129,10 @@ public class packetTool {
 		 * use the information in captured packet to reconstruct new hello packet to send
 		 */
 		try {
+			System.out.println("header:");
+			util.util.printHexData(pack.header);
+			System.out.println("\ncontent:");
+			util.util.printHexData(pack.data);
 			/**
 			 * ip header
 			 */

@@ -35,6 +35,7 @@ public class callback_reciever implements PacketReceiver {
 				return;
 			}
 			if(pack instanceof OSPF_DD_Packet){//may be exstart need to return a suitable DD to establish master/slave relation
+				System.out.println(pack);
 				OSPF_DD_Packet ddpack=packetTool.getAnwserDD(pack);
 				jpcap_util utilInstance=jpcap_util.getInstance(1);
 				utilInstance.sendPacket(ddpack);
