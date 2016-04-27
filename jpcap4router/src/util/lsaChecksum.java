@@ -21,7 +21,7 @@ public class lsaChecksum {
 	   index required in the specification ISO 8473, Annex C.1 */
 	/* calling with offset == FLETCHER_CHECKSUM_VALIDATE will validate the checksum
 	   without modifying the buffer; a valid checksum returns 0 */
-	public static short	fletcher_checksum(byte[] buffer, int len, int offset)
+	private static short	fletcher_checksum(byte[] buffer, int len, int offset)
 	{
 	  byte[] p;
 	  int x, y, c0, c1;

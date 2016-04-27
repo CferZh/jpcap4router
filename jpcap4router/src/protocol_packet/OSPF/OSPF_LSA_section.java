@@ -13,4 +13,18 @@ public class OSPF_LSA_section {
 	byte[] sequence=new byte[4];
 	byte[] checksum=new byte[2];
 	byte[] length=new byte[2];
+	/**
+	 * router lsa
+	 */
+	byte[] numberOfLink=new byte[2];
+	byte[] linkData=null;
+	/**
+	 * network lsa
+	 */
+	byte[] netmask=new byte[4];
+	byte[] attackedRouter=null;
+	
+	public short getChecksum(byte[] data){
+		return util.lsaChecksum.ospf_lsa_checksum(data);
+	}
 }
