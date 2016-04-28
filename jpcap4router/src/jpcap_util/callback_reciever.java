@@ -13,6 +13,8 @@ import protocol_packet.OSPF_packet;
 import protocol_packet.packet_factory;
 import protocol_packet.OSPF.OSPF_DD_Packet;
 import protocol_packet.OSPF.OSPF_Hello_Packet;
+import protocol_packet.OSPF.OSPF_LSU_Packet;
+import protocol_packet.OSPF.OSPF_LSack_Packet;
 
 public class callback_reciever implements PacketReceiver {
 	@Override
@@ -47,6 +49,11 @@ public class callback_reciever implements PacketReceiver {
 					utilInstance.sendPacket(ddpack);
 				}
 				
+			}
+			if(pack instanceof OSPF_LSU_Packet){//need to answer lsack
+				OSPF_LSack_Packet lsackpack=packetTool.getLSAck(pack);
+				jpcap_util utilInstance=jpcap_util.getInstance(1);
+				utilInstance.sendPacket(lsackpack);
 			}
 			
 		}

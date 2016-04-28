@@ -11,6 +11,7 @@ import protocol_packet.OSPF_packet;
 import protocol_packet.packet_factory;
 import protocol_packet.OSPF.OSPF_DD_Packet;
 import protocol_packet.OSPF.OSPF_Hello_Packet;
+import protocol_packet.OSPF.OSPF_LSack_Packet;
 
 public class packetTool {
 	/**
@@ -206,5 +207,9 @@ public class packetTool {
 			e1.printStackTrace();
 		}
 		return false;
+	}
+	public static OSPF_LSack_Packet getLSAck(IPPacket pack) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
