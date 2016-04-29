@@ -15,6 +15,11 @@ public class OSPF_LSU_Packet extends OSPF_packet {
 		// TODO Auto-generated constructor stub	
 		super(p);
 	}
+	public void setLSAnum(int num){
+		for(int i=0;i<4;i++){
+			LSAs_num[i]=(byte) ((num>>(24-3*i))&0xff);
+		}
+	}
 	
 	
 }
