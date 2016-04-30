@@ -195,6 +195,8 @@ public class OSPF_Hello_Packet extends OSPF_packet {
 				data[OSPF_HEADER_LEN+20+i]=active_neighbor[i];
 			}
 		}
+		data[2]=(byte)((data.length-12)>>8&0xff);
+		data[3]=(byte)((data.length-12)&0xff);
 		byte[] pchecksum=util.util.getchecksum(data);
 		data[12]=pchecksum[0];
 		data[13]=pchecksum[1];

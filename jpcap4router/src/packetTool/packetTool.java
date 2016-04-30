@@ -61,9 +61,9 @@ public class packetTool {
 			byte[] neighbors=((OSPF_Hello_Packet) pack).source_router;
 			hello.setActiveNeighbor(neighbors);//set active neighbor
 			//reset len & checksum in ospf header 
-			int len=hello.getSendableData().length-12;
-			hello.setPackLen(len);
-			hello.setChecksum(util.util.getchecksum(hello.getSendableData()));
+		//	int len=hello.getSendableData().length-12;
+		//	hello.setPackLen(len);
+//			hello.setChecksum(util.util.getchecksum(hello.getSendableData()));
 			//set data field in ip packet
 			hello.data=hello.getSendableData();
 			/**

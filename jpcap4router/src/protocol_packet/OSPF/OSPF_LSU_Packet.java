@@ -5,7 +5,7 @@ import protocol_packet.OSPF_packet;
 
 public class OSPF_LSU_Packet extends OSPF_packet {
 	/**
-	 * variables in OSPF HELLO packet
+	 * variables in OSPF HELLO pack
 	 */
 	
 	public byte[] LSAs_num=new byte[4];
