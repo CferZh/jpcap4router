@@ -27,10 +27,15 @@ public class callback_reciever implements PacketReceiver {
 			}
 			IPPacket pack=packet_factory.createPacket((IPPacket) p);
 			if(pack instanceof OSPF_Hello_Packet){//ospf hello -> need to return a suitable hello to build neighor
-				
-				OSPF_Hello_Packet hello=packetTool.getAnswerHello(pack);
+				//主动发hello
+				byte[] myrouter={0x01,0x01,0x03,0x01};
+				byte[] myip={0x01,0x01,0x02,0x2};
+				OSPF_Hello_Packet hello=packetTool.getInitHello(myrouter,myip, pack);
+				//回应hello,建立邻居
+				//OSPF_Hello_Packet hello=packetTool.getAnswerHello(pack);
 				jpcap_util utilInstance=jpcap_util.getInstance(3);
 				utilInstance.sendPacket(hello);
+				System.out.println("send");
 				//主动发起ex start
 //				OSPF_DD_Packet ddpack=packetTool.getInitDD(pack);
 //				utilInstance.sendPacket(ddpack);
