@@ -25,7 +25,11 @@ public class jpcap_util {
 			System.out.println("选择要使用的网卡:");
 			for(int i=0;i<devices.length;i++){
 				
-				System.out.println(i+" : "+devices[i].description);				
+				System.out.print(i+" :"
+						+ " "+devices[i].description+"\t"
+						+devices[i].name+"\t"
+						+devices[i].toString()+"\t"	);
+				util.util.printHexData(devices[i].mac_address);
 			}
 			
 			int deviceid=id>=0?id:new Scanner(System.in).nextInt();
