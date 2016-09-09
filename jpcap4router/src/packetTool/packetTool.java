@@ -19,6 +19,7 @@ public class packetTool {
 	 * @param pack
 	 * @return
 	 */
+	@Deprecated
 	public static OSPF_Hello_Packet getInitHello(byte[] MyRouterID,byte[] MyIP,IPPacket pack){
 		OSPF_Hello_Packet hello=new OSPF_Hello_Packet();
 		byte dstIP[]={(byte) 0xE0,(byte)0x00,(byte)0x00,(byte)0x05};//broadcast dst 224.0.0.5
@@ -150,6 +151,7 @@ public class packetTool {
 	 * @param pack
 	 * @return
 	 */
+	@Deprecated
 	public static OSPF_DD_Packet getInitDD(IPPacket pack){
 		OSPF_DD_Packet ddpack=new OSPF_DD_Packet();
 //		byte dstIP[]={(byte) 0xE0,(byte)0x00,(byte)0x00,(byte)0x05};//broadcast dst 224.0.0.5
@@ -228,23 +230,33 @@ public class packetTool {
 			/**
 			 * ospf header
 			 */
-			byte[] sr=new byte[4];
-			for(int i=0;i<4;i++){
-				sr[i]=((OSPF_packet)pack).source_router[i];
+//			byte[] sr=new byte[4];
+//			for(int i=0;i<4;i++){
+//				sr[i]=((OSPF_packet)pack).source_router[i];
+//			}
+//			sr[3]+=1;
+			byte[] sr={(byte) 0xfe,(byte) 0xfe,(byte) 0xfe,(byte) 0xfe};
+ 			byte[] aid={0x00,0x00,0x00,0x00};
+ 			for(int i=0;i<4;i++){
+ 				aid[i]=((OSPF_packet)pack).area_id[i];
 			}
-			sr[3]+=1;
-			byte[] aid={0x00,0x00,0x00,0x00};
 			byte[] authData={0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
 			ddpack.setAllOSPFHeader(2, 2, 0, sr, aid, 0, authData);
 			/**
 			 * ospf DD content
 			 */
-			ddpack.setInterfaceMTU(1500);
-			ddpack.setOptions((byte)0x52);
-			ddpack.setDDDescription(3);
-			ddpack.setSequence(2223);
-			byte[] lsaData = {0x00,0x20,0x22,0x01,0x01,0x01,0x03,0x01,0x01,0x01,0x03,0x01,(byte) 0x80,0x00,0x00,0x02,0x43,(byte) 0xb5,0x00,0x30};
-			ddpack.setLSAData(lsaData, lsaData.length);
+			ddpack.setInterfaceMTU(util.util.parseByte2Int(((OSPF_DD_Packet)pack).interface_MTU));
+			ddpack.setOptions((byte)0x42);
+			if(((OSPF_DD_Packet)pack).DB_description>3){
+				ddpack.setDDDescription(7);
+				ddpack.setSequence(1234);
+			}
+			else{
+				ddpack.setDDDescription(1);
+				ddpack.setSequence(1235);
+			}
+//			byte[] lsaData = {0x00,0x20,0x22,0x01,0x01,0x01,0x03,0x01,0x01,0x01,0x03,0x01,(byte) 0x80,0x00,0x00,0x02,0x43,(byte) 0xb5,0x00,0x30};
+//			ddpack.setLSAData(lsaData, lsaData.length);
 			ddpack.data=ddpack.getSendableData();
 			/**
 			 * set datalink header

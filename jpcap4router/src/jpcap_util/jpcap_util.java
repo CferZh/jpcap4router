@@ -14,10 +14,18 @@ public class jpcap_util {
 	private JpcapSender sender=null;
 	private Thread captorThread=null;
 	private static jpcap_util instance=null;
+	
+	/**
+	 * argv: -1 choose netcard
+	 * 		 >0 using assigned netcardID
+	 * 		on zyf pc 1 means wlan0 3 means reltek
+	 * 		on zyf_work_pc 1 means wlan
+	 */
+	private static int deviceID=1;
 	private jpcap_util(){
 		super();
 	}
-	public static jpcap_util getInstance(int id){
+	public static jpcap_util getInstance(){
 		if(instance==null){
 			instance=new jpcap_util();
 			//获取网卡设备
@@ -32,7 +40,7 @@ public class jpcap_util {
 				util.util.printHexData(devices[i].mac_address);
 			}
 			
-			int deviceid=id>=0?id:new Scanner(System.in).nextInt();
+			int deviceid=deviceID>=0?deviceID:new Scanner(System.in).nextInt();
 			try {
 				//打开网卡
 				/** openDevice(NetworkInterface intrface, int snaplen, boolean promics, int to_ms);

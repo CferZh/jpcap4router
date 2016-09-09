@@ -17,7 +17,7 @@ public abstract class OSPFStatMachine   {
 		//收一个包 
 		//判断是否为OSPF
 		//判断OSPF包类型 然后分别  dealWithHELLO dealWithDD dealWithLSU 
-		jpcap=jpcap_util.getInstance(-1);
+		jpcap=jpcap_util.getInstance();
 		jpcap.startCaptorWithReciever(new OSPFreciver());
 		
 	}
