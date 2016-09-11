@@ -21,7 +21,7 @@ public class jpcap_util {
 	 * 		on zyf pc 1 means wlan0 3 means reltek
 	 * 		on zyf_work_pc 1 means wlan
 	 */
-	private static int deviceID=1;
+	private static int deviceID=3;
 	private jpcap_util(){
 		super();
 	}
@@ -40,7 +40,7 @@ public class jpcap_util {
 				util.util.printHexData(devices[i].mac_address);
 			}
 			
-			int deviceid=deviceID>=0?deviceID:new Scanner(System.in).nextInt();
+			deviceID=deviceID>=0?deviceID:new Scanner(System.in).nextInt();
 			try {
 				//打开网卡
 				/** openDevice(NetworkInterface intrface, int snaplen, boolean promics, int to_ms);
@@ -49,8 +49,8 @@ public class jpcap_util {
 				 *  romics 是否过滤（Mac地址不是当前网卡的IP数据包）
 				 *  to_ms 超时时间
 				 */
-				instance.sender=JpcapSender.openDevice(devices[deviceid]);
-				instance.captor=JpcapCaptor.openDevice(devices[deviceid], 65535, false, 20);
+				instance.sender=JpcapSender.openDevice(devices[deviceID]);
+				instance.captor=JpcapCaptor.openDevice(devices[deviceID], 65535, false, 20);
 				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -96,11 +96,12 @@ public class jpcap_util {
 	 * @return
 	 */
 	public static byte[] getMyMac(){
-		byte[] mac={0x74,(byte) 0xe5,0x0b,0x45,(byte) 0x82,0x7a};//无线网卡
-	//	byte[] mac={(byte) 0xf0,(byte) 0xde,(byte) 0xf1,(byte) 0x8d,0x3f,(byte) 0xda};//有线网卡
+//		byte[] mac={0x74,(byte) 0xe5,0x0b,0x45,(byte) 0x82,0x7a};//无线网卡
+//		byte[] mac={(byte) 0xf0,(byte) 0xde,(byte) 0xf1,(byte) 0x8d,0x3f,(byte) 0xda};//有线网卡
+	
 		byte[] rMac=new byte[6];
 		for(int i=0;i<6;i++){
-			rMac[i]=mac[i];
+			rMac[i]=((JpcapCaptor.getDeviceList()[deviceID]).mac_address[i]);
 		}
 		return rMac;
 	}

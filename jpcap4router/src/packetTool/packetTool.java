@@ -3,6 +3,7 @@ package packetTool;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+import jpcap.packet.DatalinkPacket;
 import jpcap.packet.EthernetPacket;
 import jpcap.packet.IPPacket;
 import jpcap.packet.Packet;
@@ -11,6 +12,7 @@ import protocol_packet.OSPF_packet;
 import protocol_packet.packet_factory;
 import protocol_packet.OSPF.OSPF_DD_Packet;
 import protocol_packet.OSPF.OSPF_Hello_Packet;
+import protocol_packet.OSPF.OSPF_LSU_Packet;
 import protocol_packet.OSPF.OSPF_LSack_Packet;
 
 public class packetTool {
@@ -100,12 +102,14 @@ public class packetTool {
 			/**
 			 * ospf header
 			 */
-			//使用比对方大的routerid
-			byte[] sr=new byte[4];
-			for(int i=0;i<4;i++){
-				sr[i]=((OSPF_packet)pack).source_router[i];
-			}
-			sr[3]+=1;
+			//使用默认source routerid
+			byte[] sr={(byte) 0xfe,(byte) 0xfe,(byte) 0xfe,(byte) 0xfe};
+			//使用比对方大的source routerid
+//			byte[] sr=new byte[4];
+//			for(int i=0;i<4;i++){
+//				sr[i]=((OSPF_packet)pack).source_router[i];
+//			}
+//			sr[3]+=1;
 		
 			byte[] aid={0x00,0x00,0x00,0x00};
 			byte[] authData={0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
@@ -216,7 +220,11 @@ public class packetTool {
 	public static OSPF_DD_Packet getAnwserDD(IPPacket pack){
 		OSPF_DD_Packet ddpack=new OSPF_DD_Packet();
 //		byte dstIP[]={(byte) 0xE0,(byte)0x00,(byte)0x00,(byte)0x05};//broadcast dst 224.0.0.5
-		byte dstMAC[]={(byte)0xc4,0x04,0x08,0x48,0x00,0x10};//ipv4mcast
+		byte dstMAC[]=new byte[6];//ipv4mcast
+		
+		for(int i=0;i<6;i++){
+			dstMAC[i]=pack.header[6+i];
+		}
 		/**
 		 * use the information in captured packet to reconstruct new hello packet to send
 		 */
@@ -245,7 +253,7 @@ public class packetTool {
 			/**
 			 * ospf DD content
 			 */
-			ddpack.setInterfaceMTU(util.util.parseByte2Int(((OSPF_DD_Packet)pack).interface_MTU));
+			ddpack.setInterfaceMTU(util.util.parseByte2Short(((OSPF_DD_Packet)pack).interface_MTU));
 			ddpack.setOptions((byte)0x42);
 			if(((OSPF_DD_Packet)pack).DB_description>3){
 				ddpack.setDDDescription(7);
@@ -271,6 +279,59 @@ public class packetTool {
 			e.printStackTrace();
 		}
 		return ddpack;
+	}
+	public static OSPF_LSU_Packet getAnwserLSU(IPPacket pack){
+		OSPF_LSU_Packet LSUpack=new OSPF_LSU_Packet();
+		byte dstMAC[]=new byte[6];//ipv4mcast
+		
+		for(int i=0;i<6;i++){
+			dstMAC[i]=pack.header[6+i];
+		}
+		/**
+		 * use the information in captured packet to reconstruct new hello packet to send
+		 */
+		try {
+			/**
+			 * ip header
+			 */
+			LSUpack.setIPv4Parameter(pack.priority,pack.d_flag,pack.t_flag,pack.r_flag,pack.rsv_tos,pack.rsv_frag
+					,pack.dont_frag,pack.more_frag,pack.offset,pack.ident,1,packet_factory.OSPF_PAKET,
+					InetAddress.getLocalHost(),pack.src_ip);
+			/**
+			 * ospf header
+			 */
+//			byte[] sr=new byte[4];
+//			for(int i=0;i<4;i++){
+//				sr[i]=((OSPF_packet)pack).source_router[i];
+//			}
+//			sr[3]+=1;
+			byte[] sr={(byte) 0xfe,(byte) 0xfe,(byte) 0xfe,(byte) 0xfe};
+ 			byte[] aid={0x00,0x00,0x00,0x00};
+ 			for(int i=0;i<4;i++){
+ 				aid[i]=((OSPF_packet)pack).area_id[i];
+			}
+			byte[] authData={0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+			LSUpack.setAllOSPFHeader(2, 5, 0, sr, aid, 0, authData);
+			/**
+			 * ospf LSU content
+			 */
+			LSUpack.LSAs_data=new byte[2];
+//			byte[] lsaData = {0x00,0x20,0x22,0x01,0x01,0x01,0x03,0x01,0x01,0x01,0x03,0x01,(byte) 0x80,0x00,0x00,0x02,0x43,(byte) 0xb5,0x00,0x30};
+//			ddpack.setLSAData(lsaData, lsaData.length);
+			LSUpack.data=LSUpack.getSendableData();
+			/**
+			 * set datalink header
+			 */
+			EthernetPacket ether=new EthernetPacket();
+			ether.frametype=EthernetPacket.ETHERTYPE_IP;
+			ether.src_mac=jpcap_util.getMyMac();
+			ether.dst_mac=dstMAC;
+			//ether.dst_mac=dst;
+			LSUpack.datalink=ether;
+		}catch(Exception e ){
+			e.printStackTrace();
+		}
+		return LSUpack;
 	}
 	public static boolean isSendByMe(Packet p){
 		try {

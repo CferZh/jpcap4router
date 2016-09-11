@@ -47,6 +47,13 @@ public class util {
 		}
 		return result;
 	}
+	public static short parseByte2Short(byte[] binary){
+		short result=0;
+		result=(short) ((binary[0]&0xff)<<8);
+		result+=binary[1]&0xff;
+		
+		return result;
+	}
 	public static byte[] parseInt2Byte(int num){
 		byte[] result=new byte[4];
 		for(int i=0;i<4;i++){
