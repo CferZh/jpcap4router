@@ -1,10 +1,10 @@
-package StatMachine;
+package statMachine;
 
-import jpcap_util.jpcap_util;
-import packetTool.packetTool;
-import protocol_packet.OSPF.OSPF_DD_Packet;
-import protocol_packet.OSPF.OSPF_Hello_Packet;
-import protocol_packet.OSPF.OSPF_LSU_Packet;
+import jpcapUtil.JpcapUtil;
+import packetTool.PacketTool;
+import protocolPacket.OSPF.OSPF_DD_Packet;
+import protocolPacket.OSPF.OSPF_Hello_Packet;
+import protocolPacket.OSPF.OSPF_LSU_Packet;
 
 public class NormalOSPFMachine extends OSPFStatMachine {
 
@@ -13,9 +13,9 @@ public class NormalOSPFMachine extends OSPFStatMachine {
 		// TODO Auto-generated method stub
 		//回应hello,建立邻居
 		OSPF_Hello_Packet hello=null;
-		hello=packetTool.getAnswerHello(pack);
+		hello=PacketTool.getAnswerHello(pack);
 		if(hello!=null){
-			jpcap_util utilInstance=jpcap_util.getInstance();
+			JpcapUtil utilInstance=JpcapUtil.getInstance();
 			utilInstance.sendPacket(hello);
 			System.out.println("send a response hello pack");
 		}
@@ -26,9 +26,9 @@ public class NormalOSPFMachine extends OSPFStatMachine {
 	public void dealwithDB(OSPF_DD_Packet pack) {
 		// TODO Auto-generated method stub
 		OSPF_DD_Packet ddpack=null;
-		ddpack=packetTool.getAnwserDD(pack);
+		ddpack=PacketTool.getAnwserDD(pack);
 		if(ddpack!=null){
-			jpcap_util utilInstance=jpcap_util.getInstance();
+			JpcapUtil utilInstance=JpcapUtil.getInstance();
 			utilInstance.sendPacket(ddpack);
 		}
 		return;

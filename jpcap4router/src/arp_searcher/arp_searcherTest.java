@@ -11,7 +11,7 @@ import jpcap.JpcapCaptor;
 import jpcap.JpcapSender;
 import jpcap.NetworkInterface;
 import jpcap.packet.ARPPacket;
-import jpcap_util.jpcap_util;
+import jpcapUtil.JpcapUtil;
 
 public class arp_searcherTest {
 

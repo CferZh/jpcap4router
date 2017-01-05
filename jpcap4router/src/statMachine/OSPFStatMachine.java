@@ -1,23 +1,23 @@
-package StatMachine;
+package statMachine;
 
 import jpcap.PacketReceiver;
 import jpcap.packet.IPPacket;
 import jpcap.packet.Packet;
-import jpcap_util.jpcap_util;
-import packetTool.packetTool;
-import protocol_packet.packet_factory;
-import protocol_packet.OSPF.OSPF_DD_Packet;
-import protocol_packet.OSPF.OSPF_Hello_Packet;
-import protocol_packet.OSPF.OSPF_LSU_Packet;
-import protocol_packet.OSPF.OSPF_LSack_Packet;
+import jpcapUtil.JpcapUtil;
+import packetTool.PacketTool;
+import protocolPacket.PacketFactory;
+import protocolPacket.OSPF.OSPF_DD_Packet;
+import protocolPacket.OSPF.OSPF_Hello_Packet;
+import protocolPacket.OSPF.OSPF_LSU_Packet;
+import protocolPacket.OSPF.OSPF_LSack_Packet;
 
 public abstract class OSPFStatMachine   {
-	jpcap_util jpcap=null;
+	JpcapUtil jpcap=null;
 	public void startMachine(){
 		//收一个包 
 		//判断是否为OSPF
 		//判断OSPF包类型 然后分别  dealWithHELLO dealWithDD dealWithLSU 
-		jpcap=jpcap_util.getInstance();
+		jpcap=JpcapUtil.getInstance();
 		jpcap.startCaptorWithReciever(new OSPFreciver());
 		
 	}
@@ -38,10 +38,10 @@ public abstract class OSPFStatMachine   {
 			// TODO Auto-generated method stub
 			//IP packet only
 			if(p instanceof IPPacket){
-				if(packetTool.isSendByMe(p)){//filter packet sent by localhost
+				if(PacketTool.isSendByMe(p)){//filter packet sent by localhost
 					return;
 				}
-				IPPacket pack=packet_factory.createPacket((IPPacket) p);
+				IPPacket pack=PacketFactory.createPacket((IPPacket) p);
 				if(pack instanceof OSPF_Hello_Packet){//ospf hello -> need to return a suitable hello to build neighor
 					dealwithHello((OSPF_Hello_Packet) pack);
 					return;

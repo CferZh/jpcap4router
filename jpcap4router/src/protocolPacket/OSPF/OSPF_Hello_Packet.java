@@ -1,9 +1,9 @@
-package protocol_packet.OSPF;
+package protocolPacket.OSPF;
 
 import jpcap.packet.IPPacket;
-import protocol_packet.OSPF_packet;
+import protocolPacket.OSPFPacket;
 
-public class OSPF_Hello_Packet extends OSPF_packet {
+public class OSPF_Hello_Packet extends OSPFPacket {
 	
 	protected static final int NORMAL_HELLO_LEN=20;//hello packet length except active neighbor
 	/**

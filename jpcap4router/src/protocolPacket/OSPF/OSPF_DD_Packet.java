@@ -1,11 +1,11 @@
-package protocol_packet.OSPF;
+package protocolPacket.OSPF;
 
 import java.lang.reflect.InvocationTargetException;
 
 import jpcap.packet.IPPacket;
-import protocol_packet.OSPF_packet;
+import protocolPacket.OSPFPacket;
 
-public class OSPF_DD_Packet extends OSPF_packet {
+public class OSPF_DD_Packet extends OSPFPacket {
 	/**
 	 * variables in OSPF HELLO packet
 	 */

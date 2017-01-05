@@ -1,12 +1,12 @@
-package protocol_packet;
+package protocolPacket;
 
 import java.net.InetAddress;
 
 import jpcap.packet.IPPacket;
-import protocol_packet.OSPF.OSPF_DD_Packet;
-import protocol_packet.OSPF.OSPF_Hello_Packet;
+import protocolPacket.OSPF.OSPF_DD_Packet;
+import protocolPacket.OSPF.OSPF_Hello_Packet;
 
-public class OSPF_packet extends IPPacket {
+public class OSPFPacket extends IPPacket {
 	
 	/**
 	 * final variables
@@ -34,7 +34,7 @@ public class OSPF_packet extends IPPacket {
 	 * @param p the whole ip packet
 	 * @return specific OSPF in (HELLO,DD,LSR,LSU,LSAck)
 	 */
-	public static OSPF_packet analyzePacket(IPPacket p){
+	public static OSPFPacket analyzePacket(IPPacket p){
 		//System.out.printf("protocol:%d\n",(int)p.data[OSPF_TYPE_BYTE]);
 		switch(p.data[OSPF_TYPE_BYTE]){
 		case OSPF_HELLO:
@@ -47,7 +47,7 @@ public class OSPF_packet extends IPPacket {
 		default:return null;
 		}
 	}
-	public OSPF_packet(IPPacket p){
+	public OSPFPacket(IPPacket p){
 		/**
 		 * ip header
 		 */
@@ -77,7 +77,7 @@ public class OSPF_packet extends IPPacket {
 			auth_data[i]=p.data[16+i];
 		}
 	}
-	public OSPF_packet() {
+	public OSPFPacket() {
 		// TODO Auto-generated constructor stub
 		super();
 	}

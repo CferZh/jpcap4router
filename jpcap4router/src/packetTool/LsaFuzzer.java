@@ -1,6 +1,6 @@
 package packetTool;
 
-public class lsaFuzzer {
+public class LsaFuzzer {
 	/**
 	 * 生成50个以上routerlsa和50个以上networklsa
 	 * @return

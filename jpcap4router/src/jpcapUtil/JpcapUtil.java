@@ -1,4 +1,4 @@
-package jpcap_util;
+package jpcapUtil;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -9,11 +9,11 @@ import jpcap.NetworkInterface;
 import jpcap.PacketReceiver;
 import jpcap.packet.Packet;
 
-public class jpcap_util {
+public class JpcapUtil {
 	private JpcapCaptor captor=null;
 	private JpcapSender sender=null;
 	private Thread captorThread=null;
-	private static jpcap_util instance=null;
+	private static JpcapUtil instance=null;
 	
 	/**
 	 * argv: -1 choose netcard
@@ -22,12 +22,12 @@ public class jpcap_util {
 	 * 		on zyf_work_pc 1 means wlan
 	 */
 	private static int deviceID=3;
-	private jpcap_util(){
+	private JpcapUtil(){
 		super();
 	}
-	public static jpcap_util getInstance(){
+	public static JpcapUtil getInstance(){
 		if(instance==null){
-			instance=new jpcap_util();
+			instance=new JpcapUtil();
 			//获取网卡设备
 			NetworkInterface[] devices = JpcapCaptor.getDeviceList(); 
 			System.out.println("选择要使用的网卡:");

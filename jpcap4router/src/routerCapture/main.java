@@ -1,7 +1,7 @@
 package routerCapture;
 
 
-import StatMachine.NormalOSPFMachine;
+import statMachine.NormalOSPFMachine;
 
 
 public class main {

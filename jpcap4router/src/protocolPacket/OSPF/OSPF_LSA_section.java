@@ -1,4 +1,4 @@
-package protocol_packet.OSPF;
+package protocolPacket.OSPF;
 /**
  * LSA section following LSR or DD
  * @author CferZ

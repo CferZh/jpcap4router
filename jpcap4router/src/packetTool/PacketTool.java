@@ -7,15 +7,15 @@ import jpcap.packet.DatalinkPacket;
 import jpcap.packet.EthernetPacket;
 import jpcap.packet.IPPacket;
 import jpcap.packet.Packet;
-import jpcap_util.jpcap_util;
-import protocol_packet.OSPF_packet;
-import protocol_packet.packet_factory;
-import protocol_packet.OSPF.OSPF_DD_Packet;
-import protocol_packet.OSPF.OSPF_Hello_Packet;
-import protocol_packet.OSPF.OSPF_LSU_Packet;
-import protocol_packet.OSPF.OSPF_LSack_Packet;
+import jpcapUtil.JpcapUtil;
+import protocolPacket.OSPFPacket;
+import protocolPacket.PacketFactory;
+import protocolPacket.OSPF.OSPF_DD_Packet;
+import protocolPacket.OSPF.OSPF_Hello_Packet;
+import protocolPacket.OSPF.OSPF_LSU_Packet;
+import protocolPacket.OSPF.OSPF_LSack_Packet;
 
-public class packetTool {
+public class PacketTool {
 	/**
 	 * based on recived hello packet building answer hello packet 
 	 * @param pack
@@ -34,7 +34,7 @@ public class packetTool {
 			 * ip header
 			 */
 			hello.setIPv4Parameter(pack.priority,pack.d_flag,pack.t_flag,pack.r_flag,pack.rsv_tos,pack.rsv_frag
-					,pack.dont_frag,pack.more_frag,pack.offset,pack.ident,1,packet_factory.OSPF_PAKET,
+					,pack.dont_frag,pack.more_frag,pack.offset,pack.ident,1,PacketFactory.OSPF_PAKET,
 					InetAddress.getLocalHost(), InetAddress.getByAddress(dstIP));
 			/**
 			 * ospf header
@@ -74,7 +74,7 @@ public class packetTool {
 			 */
 			EthernetPacket ether=new EthernetPacket();
 			ether.frametype=EthernetPacket.ETHERTYPE_IP;
-			ether.src_mac=jpcap_util.getMyMac();
+			ether.src_mac=JpcapUtil.getMyMac();
 			ether.dst_mac=dstMAC;
 			//ether.dst_mac=dst;
 			hello.datalink=ether;
@@ -97,7 +97,7 @@ public class packetTool {
 			 * ip header
 			 */
 			hello.setIPv4Parameter(pack.priority,pack.d_flag,pack.t_flag,pack.r_flag,pack.rsv_tos,pack.rsv_frag
-					,pack.dont_frag,pack.more_frag,pack.offset,pack.ident,1,packet_factory.OSPF_PAKET,
+					,pack.dont_frag,pack.more_frag,pack.offset,pack.ident,1,PacketFactory.OSPF_PAKET,
 					InetAddress.getLocalHost(), InetAddress.getByAddress(dstIP));
 			/**
 			 * ospf header
@@ -139,7 +139,7 @@ public class packetTool {
 			 */
 			EthernetPacket ether=new EthernetPacket();
 			ether.frametype=EthernetPacket.ETHERTYPE_IP;
-			ether.src_mac=jpcap_util.getMyMac();
+			ether.src_mac=JpcapUtil.getMyMac();
 			ether.dst_mac=dstMAC;
 			//ether.dst_mac=dst;
 			hello.datalink=ether;
@@ -172,7 +172,7 @@ public class packetTool {
 			 * ip header
 			 */
 			ddpack.setIPv4Parameter(pack.priority,pack.d_flag,pack.t_flag,pack.r_flag,pack.rsv_tos,pack.rsv_frag
-					,pack.dont_frag,pack.more_frag,pack.offset,pack.ident+1,1,packet_factory.OSPF_PAKET,
+					,pack.dont_frag,pack.more_frag,pack.offset,pack.ident+1,1,PacketFactory.OSPF_PAKET,
 					InetAddress.getLocalHost(),pack.src_ip);
 			/**
 			 * ospf header
@@ -181,7 +181,7 @@ public class packetTool {
 			
 			byte[] sr=new byte[4];
 			for(int i=0;i<4;i++){
-				sr[i]=((OSPF_packet)pack).source_router[i];
+				sr[i]=((OSPFPacket)pack).source_router[i];
 			}
 			sr[3]+=1;
 			byte[] aid={0x00,0x00,0x00,0x00};
@@ -203,7 +203,7 @@ public class packetTool {
 			 */
 			EthernetPacket ether=new EthernetPacket();
 			ether.frametype=EthernetPacket.ETHERTYPE_IP;
-			ether.src_mac=jpcap_util.getMyMac();
+			ether.src_mac=JpcapUtil.getMyMac();
 			ether.dst_mac=dstMac;
 			//ether.dst_mac=dst;
 			ddpack.datalink=ether;
@@ -233,7 +233,7 @@ public class packetTool {
 			 * ip header
 			 */
 			ddpack.setIPv4Parameter(pack.priority,pack.d_flag,pack.t_flag,pack.r_flag,pack.rsv_tos,pack.rsv_frag
-					,pack.dont_frag,pack.more_frag,pack.offset,pack.ident,1,packet_factory.OSPF_PAKET,
+					,pack.dont_frag,pack.more_frag,pack.offset,pack.ident,1,PacketFactory.OSPF_PAKET,
 					InetAddress.getLocalHost(),pack.src_ip);
 			/**
 			 * ospf header
@@ -246,7 +246,7 @@ public class packetTool {
 			byte[] sr={(byte) 0xfe,(byte) 0xfe,(byte) 0xfe,(byte) 0xfe};
  			byte[] aid={0x00,0x00,0x00,0x00};
  			for(int i=0;i<4;i++){
- 				aid[i]=((OSPF_packet)pack).area_id[i];
+ 				aid[i]=((OSPFPacket)pack).area_id[i];
 			}
 			byte[] authData={0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
 			ddpack.setAllOSPFHeader(2, 2, 0, sr, aid, 0, authData);
@@ -271,7 +271,7 @@ public class packetTool {
 			 */
 			EthernetPacket ether=new EthernetPacket();
 			ether.frametype=EthernetPacket.ETHERTYPE_IP;
-			ether.src_mac=jpcap_util.getMyMac();
+			ether.src_mac=JpcapUtil.getMyMac();
 			ether.dst_mac=dstMAC;
 			//ether.dst_mac=dst;
 			ddpack.datalink=ether;
@@ -295,7 +295,7 @@ public class packetTool {
 			 * ip header
 			 */
 			LSUpack.setIPv4Parameter(pack.priority,pack.d_flag,pack.t_flag,pack.r_flag,pack.rsv_tos,pack.rsv_frag
-					,pack.dont_frag,pack.more_frag,pack.offset,pack.ident,1,packet_factory.OSPF_PAKET,
+					,pack.dont_frag,pack.more_frag,pack.offset,pack.ident,1,PacketFactory.OSPF_PAKET,
 					InetAddress.getLocalHost(),pack.src_ip);
 			/**
 			 * ospf header
@@ -308,7 +308,7 @@ public class packetTool {
 			byte[] sr={(byte) 0xfe,(byte) 0xfe,(byte) 0xfe,(byte) 0xfe};
  			byte[] aid={0x00,0x00,0x00,0x00};
  			for(int i=0;i<4;i++){
- 				aid[i]=((OSPF_packet)pack).area_id[i];
+ 				aid[i]=((OSPFPacket)pack).area_id[i];
 			}
 			byte[] authData={0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
 			LSUpack.setAllOSPFHeader(2, 5, 0, sr, aid, 0, authData);
@@ -324,7 +324,7 @@ public class packetTool {
 			 */
 			EthernetPacket ether=new EthernetPacket();
 			ether.frametype=EthernetPacket.ETHERTYPE_IP;
-			ether.src_mac=jpcap_util.getMyMac();
+			ether.src_mac=JpcapUtil.getMyMac();
 			ether.dst_mac=dstMAC;
 			//ether.dst_mac=dst;
 			LSUpack.datalink=ether;
